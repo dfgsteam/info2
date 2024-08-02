@@ -1,0 +1,278 @@
+% Dokoumentenklassen legen das grobe Layout fest. Hier wird eine selbsterstellte Klasse verwendet, deswegen benötigt man zum erstellen des PDFs auch die Datei uebungsblatt.cls und uebungsblatt.sty
+\documentclass{uebungsblatt}
+
+\usepackage[linesnumbered,commentsnumbered]{algorithm2e}
+\usepackage{tikz}
+\usepackage{hyperref}
+% Store \nl in \oldnl
+\let\oldnl\nl
+% Remove line number for one line
+\newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}}
+
+%Hier wird die Kopfzeile erstellt
+\header{\textbf{Grundlagen der Praktischen Informatik}\hfill\textbf{Sommersemester 2024}\\
+Student:in1 (Matrikelnummer1) % Name des Gruppenmitglieds Eintragen
+\hfill Georg-August-Universität Göttingen \\
+Student:in2 (Matrikelnummer2)  % Name des Gruppenmitglieds Eintragen
+\hfill Institut für Informatik\\ 
+Student:in3 (Matrikelnummer2)\\  % Name des Gruppenmitglieds Eintragen
+Student:in4 (Matrikelnummer2)\\  % Name des Gruppenmitglieds Eintragen
+
+% Hiermit wird der horizontale Strick erzeugt, der die Kopfzeile abgrenzt.
+\rule{\textwidth}{0.1mm}}
+
+% Hier wird die Blattnummer festgelegt.
+\blattnummer{7}
+
+% Hier beginnt der eigentliche Textkörper. Alles zwischen \begin{document} und \end{document} ist der eigentliche Text
+\begin{document}
+
+% Mit \underline kann man Sachen unterstreichen
+
+
+% \begin{aufgabe} erstellt ein Aufgabenumgebung mit [...] könnt ihr den Titel angeben und mit \score die Punktzahl festlegen. Ist aber für euch nicht so wichtig.
+\begin{aufgabe}[KNF \score{8}]
+Gegeben sei die folgende aussagenlogische Formel $F$ mit den atomaren Aussagen $A, B, C, D$.
+
+\begin{align*}
+\bigl((C \land \neg D) \land \neg (\neg D \implies B)\bigr) 
+\lor 
+\bigl((\neg A \lor \neg B) \land (\neg A \implies \neg C)\bigr)
+\end{align*}
+
+Formen Sie die Formel in Konjunktive Normalform (KNF) um und geben Sie die resultierende Klauselmenge an.\\
+\score{8} 
+
+
+\end{aufgabe}
+% Hier könnt ihr eure Lösung hinschreiben
+\begin{loesung} 
+
+\end{loesung}
+\newpage
+%-----------------------------
+\begin{aufgabe}[Resolutionskalkül \score{13}]
+Betrachten Sie die folgende aussagenlogische Formel.
+\begin{align*}
+F = 
+(X\vee \neg Y) \wedge
+(\neg X\vee \neg Y\vee \neg Z) \wedge 
+(\neg X\vee Z) \wedge 
+(X\vee Y\vee Z) \wedge
+(Y\vee \neg Z)
+\end{align*}
+
+\begin{enumerate}
+\item
+Bestimmen Sie die Klauselmenge $\mathcal{K}_0$ der Formel $F$.\\
+\score{2}
+\item
+F ist nicht erfüllbar. Zeigen Sie das mit dem Resolutionskalkül
+der Aussagenlogik.
+
+Geben Sie für jedem Schritt $i$ folgendes an.
+\begin{align*}
+\mathcal{K}_i = \mathrm{Res}(\mathcal{K}_{i-1}) = \mathcal{K}_{i-1} \cup \{R\ |\ R \mbox{ ist Resolvente von } K', K'' \in \mathcal{K}_{i-1} \} 
+\end{align*}
+\score{11}
+
+\underline{Hinweis}
+
+Der letzte Schritt ist die Bildung der Resolvente der
+Klauseln $\{Z\}$ und $\{\neg Z\}$. 
+
+\smallskip
+\underline{Beispiel aus dem Skript}
+\begin{align*}
+\mathcal{K}_0 &= \Bigl\{\{P, S\},\{\neg P, \neg S\},\{\neg S, A\},\{\neg A, P\},\{P\},\{S\}\Bigr\} \\
+\mathcal{K}_1 &= Res(\mathcal{K}_0) = \mathcal{K}_0 \cup \Bigl\{ \{\neg S\}\ | 
+\mbox{ Resolvente von } \{\neg P, \neg S\}, \{P\} \Bigr\} \\
+\mathcal{K}_2 &= Res(\mathcal{K}_1) = \mathcal{K}_1 \cup \Bigl\{ \quad \emptyset\quad\, | 
+\mbox{ Resolvente von } \{\neg S\}, \{S\} \Bigr\} 
+\end{align*}
+
+
+\end{enumerate}
+
+\end{aufgabe}
+\begin{loesung}
+
+\end{loesung}
+\newpage
+\begin{aufgabe}[Formeln und Terme \score{18}]
+Betrachten Sie eine einfache arithmetische Sprache
+über der Individuenmenge der ganzen Zahlen $\mathbb{Z}$
+mit folgender Signatur.
+Die arithmetischen Operationen und die Größenrelationen über $\mathbb{Z}$ werden
+als bekannt vorausgesetzt.
+
+\begin{itemize}
+\item
+Prädikate $\mathcal{P} = \{ <, > \}$.
+\begin{itemize}
+\item Alle Prädikate habe die Stelligkeit 2.
+\item Es gibt $X < Y$ ist genau dann \textit{wahr}, wenn $X$ echt kleiner als $Y$ ist.
+\item Es gibt $X > Y$ ist genau dann \textit{wahr}, wenn $X$ echt größer als $Y$ ist.
+\end{itemize}
+\item
+Funktoren $\mathcal{F} = \{ +, - \}$.\begin{itemize}
+\item Alle Funktoren habe die Stelligkeit 2.
+\item Der Funktor $+$ entspricht der Addition in $\mathbb{Z}$.
+\item Der Funktor $-$ entspricht der Subtraktion in $\mathbb{Z}$.
+\end{itemize}
+\end{itemize}
+
+\medskip
+Welche der folgenden Ausdrücke sind Formeln, welche Terme und welche gehören nicht 
+zur Sprache? Begründen Sie jeweils Ihre Entscheidung.
+
+\medskip
+Kann für einen Formel eine Wahrheitswert angegeben werden, gegeben Sie diesen an 
+und begründen Sie Ihre Antwort. 
+
+\medskip
+Kann für eine Term das bezeichnete Objekt angegeben werden, geben Sie dieses an 
+und begründen Sie Ihre Antwort. 
+
+\begin{enumerate} %%[a)]
+\item    
+$X + ( -Y)$
+\item  
+$1+2-X-Y$
+\item  
+$2 < \bigl( ( 2 > 3) \vee (3 \ge 2) \bigr)$
+\item  
+$1 > \bigl( \exists X: (X < 0) \bigr)$
+\item 
+$2 + 3 = 5$
+\item 
+$(X > 2) \wedge (X + 2)$
+\item 
+$(Z > 2) \vee \bigl( (Z - 1) < 0 \bigr)$
+\item 
+$ \forall X: \bigl( X \Rightarrow \bigl( X \cdot (2 + 3) \bigr) \bigr)$
+\item 
+$\exists X: \Bigl( \exists Y: \bigl( (X > 2) \wedge \bigl( \neg (Y < 3) \bigr) \bigr) \Bigr)$
+\item
+$6 + 1 - 8$
+\item 
+$ \forall X: \bigl( \bigl( X \wedge (2 > 3) \bigr) \Rightarrow X \bigr)$
+\item 
+$\exists : \bigl( (Z > 2) \vee \bigl( (Z - 1) < 0 \bigr) \bigr)$
+\end{enumerate}
+\score{18}
+
+\end{aufgabe}
+% Hier könnt ihr eure Lösung hinschreiben
+\begin{loesung}
+
+\end{loesung}
+\newpage
+\begin{aufgabe}[Sprachen und Formeln \score{36}]
+\begin{enumerate}
+\item
+Gegeben ist eine Sprache
+über der Individuenmenge der rationalen Zahlen $\mathbb{Q}$
+mit folgender Signatur.
+\begin{itemize}
+\item
+Prädikate $\mathcal{P} = \{ = \}$.
+
+Das Prädikat $=$ hat die Stelligkeit 2 und es gilt
+$X = Y$ ist genau dann \textit{wahr}, wenn $X$ und $Y$ das gleiche Objekt aus $\mathbb{Q}$ bezeichnen.
+
+\item
+Funktoren $\mathcal{F} = \emptyset$.
+\end{itemize}
+
+Geben Sie den Wahrheitswert der folgenden Formeln an und
+begründen Sie jeweils ihre Antwort.
+
+\begin{enumerate}
+\item 
+$\forall X : \bigl( \exists Y : (X = Y) \bigr)$\\
+\score{4}
+
+\item 
+$\forall X : \bigl( \forall Y : (X = Y) \bigr)$\\
+\score{4}
+
+\item 
+$\exists X : \bigl( \forall Y : (X = Y) \bigr)$\\
+\score{4}
+
+\item 
+$\exists X : \bigl( \exists Y : (X = Y) \bigr)$\\
+\score{4}
+
+\end{enumerate}
+
+%-----------------------------
+\item 
+Gegeben ist eine Sprache
+über der Individuenmenge der natürlichen Zahlen (inklusive 0)
+$\mathbb{N}_0 = \mathbb{N} \cup \{0\}$ 
+mit folgender Signatur. Die arithmetischen Operationen über $\mathbb{N}_0$
+sind wohlbekannt.
+
+\begin{itemize}
+\item
+Prädikate $\mathcal{P} = \{ = \}$.
+
+Das Prädikat $=$ hat die Stelligkeit 2 und es gilt
+$X = Y$ ist genau dann \textit{wahr}, wenn $X$ und $Y$ das gleiche Objekt aus $\mathbb{N}_0$ bezeichnen.
+
+\item
+Funktoren $\mathcal{F} = \{ +, dreieck, quadrat \}$.
+
+Der Funktor $+$ hat die Stelligkeit 2 und entspricht der Addition in $\mathbb{N}_0$.
+
+Der Funktor $dreieck$ hat die Stelligkeit 1. Es gilt 
+$dreieck(0) = 0$ und sonst $dreieck(X) = \sum_{i=1}^{X} i$. 
+
+Der Funktor $quadrat$ hat die Stelligkeit 1. Es gilt $quadrat(0) = 0$ 
+und sonst $quadrat(X) = \sum_{i=1}^{X} (2i-1)$.
+\end{itemize}
+
+Geben Sie den Wahrheitswert der folgenden Formeln an. Mit Begründung.
+\begin{enumerate}
+\item 
+$\exists X : \bigl( \exists Y : \bigl( (\neg (X = Y)) \wedge (quadrat(X) = quadrat(Y)) \bigr) \bigr)$\\
+\score{5}
+
+\item 
+$\forall X : \bigl( \exists Y : \bigl( (\neg (X = Y)) \wedge (quadrat(X) = quadrat(Y)) \bigr) \bigr)$\\
+\score{5}
+
+\item 
+$\forall X : \bigl( \exists Y : 
+\bigl(
+(dreieck(X) + dreieck(Y)) = quadrat(X) 
+\bigr)
+\bigr)$\\
+\score{5}
+
+\item 
+$\exists X: 
+\Bigl( \forall Y : 
+\Bigl(  \neg
+\bigl(
+(dreieck(X) + dreieck(Y)) = quadrat(X) 
+\bigr)
+\Bigr)
+\Bigr)$
+
+
+\end{enumerate}
+\score{5}
+
+\end{enumerate}
+
+
+
+\end{aufgabe}
+% Hier könnt ihr eure Lösung hinschreiben
+\begin{loesung}
+
+\end{loesung}
+\end{document}

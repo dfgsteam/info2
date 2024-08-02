@@ -1,0 +1,205 @@
+% Dokoumentenklassen legen das grobe Layout fest. Hier wird eine selbsterstellte Klasse verwendet, deswegen benötigt man zum erstellen des PDFs auch die Datei uebungsblatt.cls und uebungsblatt.sty
+\documentclass{uebungsblatt}
+
+\usepackage[linesnumbered,commentsnumbered]{algorithm2e}
+% Store \nl in \oldnl
+\let\oldnl\nl
+% Remove line number for one line
+\newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}}
+
+%Hier wird die Kopfzeile erstellt
+\header{\textbf{Grundlagen der Praktischen Informatik}\hfill\textbf{Sommersemester 2024}\\
+Student:in1 (Matrikelnummer1) % Name des Gruppenmitglieds Eintragen
+\hfill Georg-August-Universität Göttingen \\
+Student:in2 (Matrikelnummer2)  % Name des Gruppenmitglieds Eintragen
+\hfill Institut für Informatik\\ 
+Student:in3 (Matrikelnummer2)\\  % Name des Gruppenmitglieds Eintragen
+Student:in4 (Matrikelnummer2)\\  % Name des Gruppenmitglieds Eintragen
+
+% Hiermit wird der horizontale Strick erzeugt, der die Kopfzeile abgrenzt.
+\rule{\textwidth}{0.1mm}}
+
+% Hier wird die Blattnummer festgelegt.
+\blattnummer{2}
+
+% Hier beginnt der eigentliche Textkörper. Alles zwischen \begin{document} und \end{document} ist der eigentliche Text
+\begin{document}
+
+% Mit \underline kann man Sachen unterstreichen
+\underline{Allgemeine Begriffe}
+
+%m Mit \begin{itemize} wird eine Aufzählung gestartet, dabei sind die Punkte nicht nummeriert. Wenn das gewünscht ist, sollte man \begin{enumerate} verwenden
+\begin{itemize}
+
+% Mit \item wird ein neuer Punkt der Aufzählung hinzugefügt
+\item
+Ein Prozess wird \textbf{aktiviert}, wenn er Prozessorzeit zugeteilt bekommt,
+d.h. der Zustand des Prozesses wechselt von bereit nach rechnend.
+
+\item
+% \textbf{} macht die Schrift bold
+Die \textbf{Ankunftszeit} eines Prozesses ist der Zeitpunkt,
+ab dem der Prozess vom Scheduling berücksichtigt wird. 
+Der Prozess wird erzeugt, ist rechenbereit und wird der Menge der Prozesse 
+mit Zustand bereit hinzugefügt. Ist dieser Prozess der einzige in der Menge der Prozesse 
+mit Zustand bereit, wird der Prozess sofort aktiviert.
+
+\underline{Beispiel.} Kommt der Prozess $P$ zum Zeitpunkt $t$ an, 
+ist die Bereitliste leer und kein Prozess belegt den Prozessor, 
+dann wird der Prozess $P$ zum Zeitpunkt $t$ aktiviert. 
+
+\item
+Die \textbf{Endzeit} ist der Zeitpunkt an dem ein Prozess vollständig abgelaufen ist.
+
+\item
+Die \textbf{Wartezeit} eines Prozesses ist die Zeit zwischen Ankunfts- und Endzeitpunkt,
+während der der Prozess keine Prozessorzeit zugeteilt bekommen hat.
+
+% Der \end{} Command schließt die aktuelle Umgebung. Wir oft automatisch erstellt. 
+\end{itemize}
+
+% \medskip fügt einen Mittelgroßen Abstand ein
+\medskip
+\underline{Nicht-unterbrechendes Scheduling}
+
+\begin{itemize}
+\item
+Ein Prozess läuft nach der Aktivierung vollständig ab ohne zu blockieren.
+\item
+Kommt eine neuer Prozess an, wird er in die Menge der bereiten Prozesse eingeordnet.
+\item
+Beendet sich der aktuell rechnenden Prozesses, muss ein Prozess,
+aus der Menge der bereiten Prozesse, ausgesucht werden, der aktiviert wird.
+Ist die Menge leer, läuft der Prozessor (quasi im Leerlauf) weiter,
+bis wieder ein Prozess in der Menge der bereiten Prozess verfügbar ist.
+\end{itemize}
+
+\medskip
+\underline{Unterbrechendes Scheduling}
+
+\begin{itemize}
+\item
+Der aktuell rechnende Prozess läuft ohne zu blockieren solange bis er 
+unterbrochen wird
+oder vollständig abgelaufen ist, d.h. sich beendet.
+\item
+Kommt eine neuer Prozess an, wird er in die Menge der bereiten Prozesse 
+eingeordnet. Weiterhin wird der aktuell rechnende Prozess unterbrochen 
+und ebenfalls in die Menge der bereiten Prozesse eingeordnet, dabei wird die noch
+verbleibende Rechenzeit dem Prozess als Rechenzeit zugeordnet.
+\item
+Kommt ein neuer Prozess an oder beendet sich der aktuell rechnenden Prozesses,
+muss ein Prozess, aus der Menge der bereiten Prozesse, ausgesucht werden, 
+der aktiviert wird.
+Ist die Menge leer, läuft der Prozessor (quasi im Leerlauf) weiter,
+bis wieder ein Prozess in der Menge der bereiten Prozess verfügbar ist.
+\end{itemize}
+
+% \newpage erzeugt einen Seitenumbruch
+\newpage
+
+% \begin{aufgabe} erstellt ein Aufgabenumgebung mit [...] könnt ihr den Titel angeben und mit \score die Punktzahl festlegen. Ist aber für euch nicht so wichtig.
+\begin{aufgabe}[Wartezeiten und Sheduling \score{45}]
+Auf der Suche nach einem guten Scheduling-Verfahren für Großrechner,
+auf den hauptsächlich rechenintensive Prozesse ablaufen,
+wird folgendes Beispiel betrachtet.
+
+\medskip
+% Mit \begin{center} wird eine zentrierte Umgebung eröffnet. Es gibt hier noch weitere Möglichkeiten. Einfach mal nach suchen.
+\begin{center}
+% Mit \begin{tabular} wird eine Tabelle erstellt. In den {} Klammern dahinter geben wir an, welche Dimension sie hat und wir der Text ausgerichtet ist (c = center)
+\begin{tabular}{|c||c|c|c|c|c|c|}
+
+% \hline erstellt eine horizontale Linie
+\hline
+% Mit & makieren wir das Ende eines Eintrags. 
+
+%Mit \\ erstellen wir einen manuellen Zeilenumbruch.
+
+%$$ leitet eine Inline Matheumgebung ein. Alternativ kann auch \[\] oder \begin{align} genutzt werden. Gerne mal ausprobieren.
+
+% Mit einem '_' stellen wir etwas unten an ein anderes Symbol an. Ähnlich kann man mit ^ etwas oben an ein Symbol schreiben. Ist dies Länger als ein Zeichen müssen {} gesetzt werden. Das könnt ihr gerne mal ausprobieren.
+Prozesse&$P_1$&$P_2$&$P_3$&$P_4$&$P_5$&$P_6$\\
+\hline
+\hline 
+Ankunftszeit &0    & 4000&5000&39000&42000&43000\\
+\hline
+Rechenzeit   &15000&20000&5000&50000&25000&10000\\
+\hline
+\end{tabular}
+\end{center}
+
+\medskip
+\begin{enumerate}
+\item
+Lassen Sie die Prozesse $P_1, \ldots, P_6$
+mit nicht-unterbrechenden und unterbrechenden Scheduling
+ablaufen. Stellen Sie jeweils, wenn ein Prozess aktiviert wird,
+den rechnenden Prozess und die Menge der bereiten Prozesse dar.
+
+Wählen Sie jeweils den zu aktivierenden Prozess,
+sodass die Wartezeit für die Prozesse in der Menge der bereiten Prozesse
+möglichst klein wird. 
+
+Bestimmen Sie die durchschnittliche Wartezeit pro Prozess.\\
+\score{14}
+
+\item
+Leiten Sie aus dem Beispiel für nicht-unterbrechendes und unterbrechendes Scheduling
+ein allgemeines Kriterium für die Wahl des jeweils zu aktivierende 
+Prozesses ab, sodass die durchschnittliche Wartezeit möglichst klein wird.\\
+\score{10}
+
+\end{enumerate}
+\end{aufgabe}
+% Hier könnt ihr eure Lösung hinschreiben
+\begin{loesung}
+\begin{enumerate}
+    \item Beispieltabelle:
+        \begin{center}
+            %Hier ist der Text links bündig (l = left)
+            \begin{tabular}{l|l|l}
+    		Zeit & Prozessor & Warteschlange \\
+    		\hline
+    		0 &  &  \\
+    		1 &  &  \\
+    	    \end{tabular}
+        \end{center}
+    \item Hier könnte Ihre Lösung für 1.2 stehen.
+\end{enumerate}
+
+\end{loesung}
+\newpage
+%-----------------------------
+\begin{aufgabe}[Mehrprogrammbetrieb und Scheduling \score{21}]
+Round-Robin Scheduler verwalten normalerweise eine Liste der
+Prozesse, die auf Zuteilung von Prozessorzeit warten, in der jeder Prozess
+genau einmal aufgeführt wird. 
+
+\begin{enumerate}
+\item
+Beschreiben Sie ausführlich was passieren, wenn Prozesse mehrfach in der Liste stehen? \\
+\score{10}
+
+\item
+Aus welchen Gründen könnte man das mehrfache Eintragen von Prozessen
+in die Liste erlauben? \\
+\score{6}
+
+\item
+Welche Probleme ergeben sich aus Mehrfacheintragungen desselben Prozesses?\\
+\score{5}
+
+\underline{Hinweis.}
+Was passiert wenn der Prozess blockiert?
+
+\end{enumerate}
+\end{aufgabe}
+\begin{loesung}
+    \begin{enumerate}
+        \item 
+        \item 
+        \item
+    \end{enumerate}
+\end{loesung}
+\end{document}

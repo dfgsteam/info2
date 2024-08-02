@@ -1,0 +1,239 @@
+% Dokoumentenklassen legen das grobe Layout fest. Hier wird eine selbsterstellte Klasse verwendet, deswegen benötigt man zum erstellen des PDFs auch die Datei uebungsblatt.cls und uebungsblatt.sty
+\documentclass{uebungsblatt}
+
+\usepackage[linesnumbered,commentsnumbered]{algorithm2e}
+\usepackage{tikz}
+\usepackage{hyperref}
+% Store \nl in \oldnl
+\let\oldnl\nl
+% Remove line number for one line
+\newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}}
+
+%Hier wird die Kopfzeile erstellt
+\header{\textbf{Grundlagen der Praktischen Informatik}\hfill\textbf{Sommersemester 2024}\\
+Student:in1 (Matrikelnummer1) % Name des Gruppenmitglieds Eintragen
+\hfill Georg-August-Universität Göttingen \\
+Student:in2 (Matrikelnummer2)  % Name des Gruppenmitglieds Eintragen
+\hfill Institut für Informatik\\ 
+Student:in3 (Matrikelnummer2)\\  % Name des Gruppenmitglieds Eintragen
+Student:in4 (Matrikelnummer2)\\  % Name des Gruppenmitglieds Eintragen
+
+% Hiermit wird der horizontale Strick erzeugt, der die Kopfzeile abgrenzt.
+\rule{\textwidth}{0.1mm}}
+
+% Hier wird die Blattnummer festgelegt.
+\blattnummer{6}
+
+% Hier beginnt der eigentliche Textkörper. Alles zwischen \begin{document} und \end{document} ist der eigentliche Text
+\begin{document}
+
+% Mit \underline kann man Sachen unterstreichen
+
+
+% \begin{aufgabe} erstellt ein Aufgabenumgebung mit [...] könnt ihr den Titel angeben und mit \score die Punktzahl festlegen. Ist aber für euch nicht so wichtig.
+\begin{aufgabe}[Nicht-rekursiver Parser I\score{48}]
+\medskip 
+Grammatik $G = (N, T, S, P\}$.
+
+\begin{itemize}
+\item[]
+Nichtterminale
+$N = \{$\textit{program, stmtList, stmt, expr, termTail, term, factorTail, factor, addOp, multOp}$\}$
+
+Terminale $T = \{$\texttt{id, (, ), :=, +, -, *, /}$\}$
+
+Startsymbol $S = $ \textit{program}
+
+\begin{tabbing}
+P = $\{\quad$ \= \textit{factorTail} \= \kill
+Produktionen \\
+P = $\{$ \> \textit{program}    \> $\rightarrow$ \textit{stmtList} \\
+\> \textit{stmtList}   \> $\rightarrow$ \textit{stmt} \textit{stmtList} $|$ $\varepsilon$ \\
+\> \textit{stmt}       \> $\rightarrow$ \texttt{id} \texttt{:=} \textit{expr} \\
+\> \textit{expr}       \> $\rightarrow$ \textit{term} \textit{termTail} \\
+\> \textit{termTail}   \> $\rightarrow$ \textit{addOp} \textit{term} \textit{termTail} $|$ $\varepsilon$ \\
+\> \textit{term}       \> $\rightarrow$ \textit{factor} \textit{factorTail} \\
+\> \textit{factorTail} \> $\rightarrow$ \textit{multOp} \textit{factor} \textit{factorTail} $|$ $\varepsilon$ \\
+\> \textit{factor}     \> $\rightarrow$ \texttt{(} \textit{expr} \texttt{)} 
+$|$ \texttt{id} \\
+\> \textit{addOp}      \> $\rightarrow$ \texttt{+} $|$ \texttt{-} \\
+\> \textit{multOp}     \> $\rightarrow$ \texttt{*} $|$ \texttt{/} \quad $\}$
+\end{tabbing}
+\end{itemize}
+
+\begin{enumerate}
+\item
+Folgende FIRST-Mengen sind gegeben.
+
+\medskip
+\begin{small}	
+FIRST(multOp factor factorTail) = $\{\texttt{*}, \texttt{/}\}$\\	
+FIRST($\epsilon$) = \{$\epsilon$\}\\			
+FIRST(\texttt{(} expr \texttt{)}) = FIRST(\texttt{(}) = $\{\texttt{(}\}$\\
+FIRST(\texttt{id}) = \{\texttt{id}\}\\
+FIRST(\texttt{+}) = \{\texttt{+}\}\\
+FIRST(\texttt{-}) = \{\texttt{-}\}\\
+FIRST(\texttt{*}) = \{\texttt{*}\}\\
+FIRST(\texttt{/}) = \{\texttt{/}\}\\
+\end{small}
+
+Berechnen Sie für jede noch fehlende rechte Seite $\alpha$ der 
+Produktion aus $P$ jeweils die Menge FIRST($\alpha$).\\
+\score{18}
+
+\item
+Folgende FOLLOW-Mengen sind gegeben.
+
+\medskip
+\begin{small}
+FOLLOW(program) = \{\$\$\}\\	
+FOLLOW(stmtList) = \{\$\$\}\\
+FOLLOW(stmt) = \{\texttt{id}, \$\$\}\\
+FOLLOW(expr) = \{\texttt{id}, \texttt{)},\$\$\}\\
+FOLLOW(multOp) = \{\texttt{(}, \texttt{id}\}
+\end{small}
+
+Berechnen Sie für die übrigen Nichtterminale $A$ die Menge FOLLOW($A$). \\
+\score{18}
+\item
+Konstruieren Sie eine Parse-Tabelle mit Hilfe von FIRST und FOLLOW.\\
+\score{12}
+
+\smallskip
+\underline{Hinweis.}
+Es reicht aus in die Zellen die rechten Seiten der Produktionen einzutragen.
+
+\end{enumerate}
+
+\end{aufgabe}
+% Hier könnt ihr eure Lösung hinschreiben
+\begin{loesung} 
+
+\end{loesung}
+\newpage
+%-----------------------------
+\begin{aufgabe}[Nicht-rekursiver Parser II \score{19}]
+\medskip
+Betrachten Sie folgende Parse-Tabelle, \texttt{<1>} ist das Startsymbol
+der zugehörigen Grammatik.
+
+\bigskip
+\begin{cut}
+\markdown
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize] \multicolumn{1}{l}{Stapel} 
+|      | 0     | 1     | $neg$   | $vv$     | $^^$     | §§      |
+| :--- | :---  | :---  | :---    | :---     | :---     | :---    |
+| <1>  | <2>   | <2>   | <2>     |          |          |         |
+| <2>  | <3><4>| <3><4>| <3><4>  |          |          |         |
+| <3>  | 0     | 1     | $neg$<2>|          |          |         |
+| <4>  |       |       |         |$vv$<3><4>|$^^$<3><4>|$epsilon$|
+\end{lstlisting}
+
+\medskip
+\end{cut}
+\begin{center}
+            \begin{tabular}{l|l|l|l|l|l|l}
+    		 & 0 & 1 & $\neg$ & $\lor$ & $\land$ & $\$\$$ \\
+    		\hline
+    		\verb|<1>| & \verb|<2>| & \verb|<2>| & \verb|<2>| & & & \\
+    		\verb|<2>| & \verb|<3><4>| & \verb|<3><4>| & \verb|<3><4>| & & & \\
+    		\verb|<3>| & $0$ & $1$ & $\neg$\verb|<2>| & & & \\
+    		\verb|<4>| &  &  &  & $\lor$\verb|<3><4>| & $\land$\verb|<3><4>| & $\varepsilon$ \\
+    	    \end{tabular}
+\end{center}
+
+
+\underline{Hinweis}
+
+\smallskip
+In den Zellen sind nur die rechten Seiten der Produktionen notiert.
+Z.B. Zelle \verb|[<3>|, $\neg$ \verb|]| enthält $\neg$\verb|<2>|, 
+d.h. der Inhalt dieser Zelle repäsentiert die Produktion 
+\verb|<3>|$\rightarrow \neg$\verb|<2>|.
+
+
+\begin{enumerate}
+\item
+Geben Sie die zugehörige Grammatik $G = (N, T, S, P\}$ an.\\
+\score{7} 
+
+\item
+
+Stellen Sie dar wie ein nicht-rekursiver Parser unter Benutzung der 
+Parse-Tabelle folgende Eingabe abarbeitet
+($\$\$$ markiert das Ende der Eingabe).
+\begin{align*}
+\neg 0 \vee 0 \wedge 1 \vee \neg 1\ \$\$
+\end{align*}
+
+Vervollständigen Sie dazu nachfolgende Tabelle.\\
+\score{12}
+
+\underline{Hinweis}
+
+In einer Tabellenzeile ist der Zustand des Stapels und die
+noch nicht verarbeitete Eingaben, inklusive des aktuellen Eingabenzeichen,
+dargestellt. Weiterhin die Aktion, die aus Stapel und Eingabe folgt.
+Mögliche Aktionen sind z.B. Folgende.
+\begin{itemize}
+\item Anwendung einer Produktion, dann wird diese notiert.
+\item Entfernen des obersten Stapelsymbols und des aktuellen Eingabensymbols, notiere \textit{match}.
+\item Stapel $\gamma$, Eingabe $\$\$$, notiere \textit{stop}.
+\item Ansonsten \textit{error}.
+\end{itemize}
+
+Aus der Aktion ergeben sich Stapel und Eingabe der nächsten Zeile.
+
+\end{enumerate}
+
+\bigskip
+\begin{cut}
+\markdown
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+| Stapel           | Eingabe                    | Aktion         |
+| ---:             | ---:                       | :---           | 
+|<1>$gamma$        |$neg$0$vv$0$^^$1$vv$$neg$1§§|<1>$rarr$<2>    |
+|<2>$gamma$        |$neg$0$vv$0$^^$1$vv$$neg$1§§|<2>$rarr$<3><4> |
+|<3><4>$gamma$     |$neg$0$vv$0$^^$1$vv$$neg$1§§|<3>$rarr$$neg$<2>|
+|$neg$<2><4>$gamma$|$neg$0$vv$0$^^$1$vv$$neg$1§§|match           |
+|<2><4>$gamma$     |     0$vv$0$^^$1$vv$$neg$1§§|                |
+\end{lstlisting}
+\end{cut}
+
+\begin{center}
+            \begin{tabular}{l|r|l}
+    		Stapel & \multicolumn{1}{l|}{Eingabe} & Aktion \\
+    		\hline
+    		\verb|<1>|$\gamma$ & $\neg 0 \lor 0 \land 1 \lor \neg 1 \$\$ $ & \verb|<1>| $\rightarrow$ \verb|<2>| \\
+    		\verb|<2>|$\gamma$ & $\neg 0 \lor 0 \land 1 \lor \neg 1 \$\$ $ & \verb|<2>| $\rightarrow$ \verb|<3><4>|\\
+    		\verb|<3><4>|$\gamma$ & $\neg 0 \lor 0 \land 1 \lor \neg 1 \$\$ $& \verb|<3>| $\rightarrow$ $\neg$\verb|<2>|\\
+    		$\neg$\verb|<2><4>|$\gamma$ & $\neg 0 \lor 0 \land 1 \lor \neg 1 \$\$ $ & match\\
+    	    \verb|<2><4>|$\gamma$ & $0 \lor 0 \land 1 \lor \neg 1 \$\$ $ & \\
+    	    \end{tabular}
+\end{center}
+\end{aufgabe}
+\begin{loesung}
+
+\end{loesung}
+\newpage
+\begin{aufgabe}[LL-Syntaxanalyse \score{8}]
+\begin{tabbing}
+$P' = \{$ \= \textit{factorTail} \= \kill
+$P' = \{$ \\
+\> \textit{product}    \> $\rightarrow$ \textit{factor} \\
+\> \textit{factor}     \> $\rightarrow$ \textit{factor} \texttt{*} \texttt{id} $|$ \texttt{id} \\
+\> \textit{sum}        \> $\rightarrow$ \texttt{id} \textit{sumList} \\
+\> \textit{sumList}    \> $\rightarrow$ \texttt{+} \textit{sum} $|$ \texttt{+} \texttt{(} \textit{product} \texttt{)} \\
+$\}$
+\end{tabbing}
+
+Schreiben Sie die Produktionen in $P'$ so um, 
+dass keine Linkrekursionen und keine 
+gemeinsamen Präfixe mehr vorkommen.\\
+\score{8}
+\end{aufgabe}
+% Hier könnt ihr eure Lösung hinschreiben
+\begin{loesung}
+
+\end{loesung}
+\end{document}

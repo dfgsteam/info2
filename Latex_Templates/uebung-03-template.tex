@@ -1,0 +1,178 @@
+% Dokoumentenklassen legen das grobe Layout fest. Hier wird eine selbsterstellte Klasse verwendet, deswegen benötigt man zum erstellen des PDFs auch die Datei uebungsblatt.cls und uebungsblatt.sty
+\documentclass{uebungsblatt}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\DeclareGraphicsRule{.pdftex}{pdf}{.pdftex}{}
+\usepackage[linesnumbered,commentsnumbered]
+{algorithm2e}
+% Store \nl in \oldnl
+\let\oldnl\nl
+% Remove line number for one line
+\newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}}
+
+%Hier wird die Kopfzeile erstellt
+\header{\textbf{Grundlagen der Praktischen Informatik}\hfill\textbf{Sommersemester 2024}\\
+Student:in1 (Matrikelnummer1) % Name des Gruppenmitglieds Eintragen
+\hfill Georg-August-Universität Göttingen \\
+Student:in2 (Matrikelnummer2)  % Name des Gruppenmitglieds Eintragen
+\hfill Institut für Informatik\\ 
+Student:in3 (Matrikelnummer2)\\  % Name des Gruppenmitglieds Eintragen
+Student:in4 (Matrikelnummer2)\\  % Name des Gruppenmitglieds Eintragen
+
+% Hiermit wird der horizontale Strick erzeugt, der die Kopfzeile abgrenzt.
+\rule{\textwidth}{0.1mm}}
+
+% Hier wird die Blattnummer festgelegt.
+\blattnummer{3}
+
+% Hier beginnt der eigentliche Textkörper. Alles zwischen \begin{document} und \end{document} ist der eigentliche Text
+\begin{document}
+
+% Mit \underline kann man Sachen unterstreichen
+\begin{aufgabe}[Synchronisation \score{35}]
+Betrachten Sie den Pseudo-Code der Prozesse I (Init), A (Alice), B (Bob).
+
+\medskip
+\begin{minipage}[t]{.4\textwidth}
+\program
+I
+\begin{lstlisting}
+global int i = 1;
+global mutex a = false;
+global mutex b = true;
+\end{lstlisting}
+\end{minipage}
+
+\smallskip
+\begin{minipage}[t]{.4\textwidth}
+\program
+A
+\begin{lstlisting}[firstnumber=4]
+while(i < 4) {
+  down(a)
+  i = i / 2 + 2
+  up(b)      }
+\end{lstlisting}
+\end{minipage}
+\begin{minipage}[t]{.05\textwidth}
+\mbox{~}
+\end{minipage}
+\begin{minipage}[t]{.4\textwidth}
+\program
+B
+\begin{lstlisting}[firstnumber=8]
+while(i < 4) {
+  down(b)
+  i = i + 1
+  up(a)      }
+\end{lstlisting}
+\end{minipage}
+
+\medskip
+\underline{Hinweis.}
+Die Variablen \texttt{i}, \texttt{a} und \texttt{b} sind global,
+d.h. in jedem Prozess verfügbar.\\
+\medskip
+Das System verwaltet
+die Prozesse, die darauf warten Rechnenzeit zu bekommen, nach dem Prinzip
+\textit{First Come First Served} (FCFS). Dabei kann \texttt{down} den Prozess aktiv schlafen legen. Das heißt, wird der Prozess geblockt, ist er nicht mehr rechnend und ein neuer Prozess kann aus der Warteschlange genommen werden. Wird ein Prozess von \texttt{down} schlafen gelegt, wird er erstmal der Schlange von dem entsprechenden  Mutex hinzugefügt. Erst, wenn der Prozess aufwacht, wird er der FCFS Warteschlange hinzugefügt.
+
+\medskip
+Die Prozesse werden in der Reihenfolge I, A, B gestartet.
+\medskip
+Vervollständigen Sie nachstehende Grafik. 
+
+\begin{itemize}
+\item
+\textit{Zeile} ist die Nummer der Codezeile, 
+aus den Prozessen I, A oder B, die gerade durchlaufen wird. 
+
+\underline{Hinweis.} Die Zeilen der Prozesse sind fortlaufend
+nummeriert, damit genügt die Nummer der Codezeile zur Unterscheidung 
+der Prozesse. 
+
+\item
+Tragen Sie unter
+der Codezeilen-Nummer den Zustand der Variablen \texttt{i}, \texttt{a} und \texttt{b} ein, der
+sich aus dem Durchlaufen der Codezeile ergibt und aktualisieren Sie die \textit{FCFS-Warteschlange}.
+
+\underline{Hinweise} 
+
+Anzahl der dargestellten Plätze in den Datenstrukturen 
+ist so gewählt, dass genug Platz für die zu speichernden Daten vorhanden ist.
+
+Der Wert \texttt{true} kann mit \textit{t}, der Wert \texttt{false} mit \textit{f} abgekürzt werden.
+\end{itemize}
+
+\pagebreak
+
+\bigskip
+\begin{center}
+\resizebox{\linewidth}{!}{\input{schedule-empty-example.pdftex_t}}
+\end{center}
+
+\medskip
+\underline{Hinweise}
+
+\medskip
+Die Grafik finden Sie noch einmal als \texttt{uebung03-grafik.pdf}
+in der Stud.IP-Veranstaltung 
+\textit{Grundlagen der Praktischen Informatik (Informatik II)} unter 
+\textit{Übung}$\rightarrow$\textit{uebung03-data}. Alternativ ist die Grafik auf der nächsten Seite zu finden.
+
+\medskip
+Wenn Sie die Grafik nicht ausdrucken 
+und wieder einlesen, sondern am Rechner vervollständigen möchten,
+eignet sich ein \textit{PDF Annotator}, z.B. Xournal (\href{http://xournal.sourceforge.net/}{Xournal}). Alternativ kann das pdf auch in ein
+Bildbearbeitungsprogramm (z.B. Gimp) oder 
+einen Vektorgrafik-Editor (z.B. LibreOffice Draw)
+importiert werden.
+
+
+\newpage
+\end{aufgabe}
+\begin{loesung}
+
+
+\begin{minipage}[t]{.4\textwidth}
+\program
+I
+\begin{lstlisting}
+global int i = 1;
+global mutex a = false;
+global mutex b = true;
+\end{lstlisting}
+\end{minipage}
+
+\smallskip
+\begin{minipage}[t]{.4\textwidth}
+\program
+A
+\begin{lstlisting}[firstnumber=4]
+while(i < 4) {
+  down(a)
+  i = i / 2 + 2
+  up(b)      }
+\end{lstlisting}
+\end{minipage}
+\begin{minipage}[t]{.05\textwidth}
+\mbox{~}
+\end{minipage}
+\begin{minipage}[t]{.4\textwidth}
+\program
+B
+\begin{lstlisting}[firstnumber=8]
+while(i < 4) {
+  down(b)
+  i = i + 1
+  up(a)      }
+\end{lstlisting}
+\end{minipage}
+
+\bigskip
+\begin{center}
+\resizebox{\linewidth}{!}{\input{schedule-empty-example.pdftex_t}}
+\end{center}
+\end{loesung}
+\end{document}

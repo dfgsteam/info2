@@ -1,0 +1,120 @@
+% Dokoumentenklassen legen das grobe Layout fest. Hier wird eine selbsterstellte Klasse verwendet, deswegen benötigt man zum erstellen des PDFs auch die Datei uebungsblatt.cls und uebungsblatt.sty
+\documentclass{uebungsblatt}
+
+\usepackage[linesnumbered,commentsnumbered]{algorithm2e}
+\usepackage{tikz}
+\usepackage{hyperref}
+% Store \nl in \oldnl
+\let\oldnl\nl
+% Remove line number for one line
+\newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}}
+
+%Hier wird die Kopfzeile erstellt
+\header{\textbf{Grundlagen der Praktischen Informatik}\hfill\textbf{Sommersemester 2024}\\
+Student:in1 (Matrikelnummer1) % Name des Gruppenmitglieds Eintragen
+\hfill Georg-August-Universität Göttingen \\
+Student:in2 (Matrikelnummer2)  % Name des Gruppenmitglieds Eintragen
+\hfill Institut für Informatik\\ 
+Student:in3 (Matrikelnummer2)\\  % Name des Gruppenmitglieds Eintragen
+Student:in4 (Matrikelnummer2)\\  % Name des Gruppenmitglieds Eintragen
+
+% Hiermit wird der horizontale Strick erzeugt, der die Kopfzeile abgrenzt.
+\rule{\textwidth}{0.1mm}}
+
+% Hier wird die Blattnummer festgelegt.
+\blattnummer{8}
+
+% Hier beginnt der eigentliche Textkörper. Alles zwischen \begin{document} und \end{document} ist der eigentliche Text
+\begin{document}
+
+% Mit \underline kann man Sachen unterstreichen
+
+
+% \begin{aufgabe} erstellt ein Aufgabenumgebung mit [...] könnt ihr den Titel angeben und mit \score die Punktzahl festlegen. Ist aber für euch nicht so wichtig.
+\begin{aufgabe}[Prädikatenlogik I \score{15}]
+\medskip
+Betrachten Sie folgende prädikatenlogische Formel.
+\begin{align*}
+\forall X:\Bigl(P(X)\implies\Bigl(\forall S:\Bigr(\exists R: \Bigr(\bigl(Q(f(R),T)\land Q(S,R)\bigr)\lor O(T)\Bigl)\Bigl)\Bigl)\Bigr)
+\end{align*}
+Gegeben ist eine Sprache über der Individuenmenge $D=[-10 .. 10]\subset \mathbb{Z}$
+(also den ganzen Zahlen von $-10$ bis $10$ inklusive) mit folgender Signatur.
+
+\smallskip
+Die arithmetischen Operationen und die Größenrelationen über $D$ sind analog zu jenen
+über den ganzen Zahlen $\mathbb{Z}$\ und werden als bekannt vorausgesetzt.
+\begin{itemize}
+    \item Prädikate $\mathcal{P}=\{O,P,Q\}$
+    \begin{itemize}
+        \item $O$ ist einstellig. $O(X)$ ist genau dann wahr, wenn $X=9$.
+        \item $P$ ist einstellig. $P(X)$ ist genau dann wahr, wenn $X\leq 0$.
+        \item $Q$ ist zweistellig. $Q(X,Y)$ ist genau dann wahr, wenn $X\geq Y$.
+    \end{itemize}
+    \item Funktoren $\mathcal{F} =\{f\}$
+    \begin{itemize}
+        \item $f$ ist einstellig. 
+\begin{align*}
+f(X) = \begin{cases}
+\ 10 &\text{für } X = -10  \\
+\ X-1 &\text{sonst}
+\end{cases}
+\end{align*}
+
+    \end{itemize}
+\end{itemize}
+Bestimmen Sie die Menge $L(T)\subseteq D$ der Werte für $T$, mit denen die Formel den
+Wahrheitswert \textbf{wahr} annimmt.\\
+\score{15} 
+
+
+\end{aufgabe}
+% Hier könnt ihr eure Lösung hinschreiben
+\begin{loesung} 
+
+\end{loesung}
+\newpage
+%-----------------------------
+\begin{aufgabe}[Prädikatenlogik II \score{15}]
+\medskip
+Betrachten Sie folgende prädikatenlogische Formel.
+\begin{align*}
+\forall S:\Bigl(\exists R:\Bigl(\bigl(Q(T,f(R))\lor Q(R,S)\bigr)\lor O(f(T))\Bigr)\Bigr)
+\end{align*}
+Gegeben ist eine Sprache über der Individuenmenge
+\begin{align*}
+D=\{\mathtt{Alice, Bob, Charlie, Diane}\}
+\end{align*}
+mit folgender Signatur.
+\begin{itemize}
+    \item Prädikate $\mathcal{P}=\{O,Q\}$
+    \begin{itemize}
+        \item $O$ ist einstellig. $O(X)$ ist genau dann wahr, wenn $X=\mathtt{Charlie}$.
+        \item $Q$ ist zweistellig. $Q(X,Y)$ ist genau dann wahr, 
+              wenn einer der folgenden Fälle eintritt.
+        \begin{itemize}
+            \item $(X,Y)=($\texttt{Bob, Alice}$)$
+            \item $(X,Y)=($\texttt{Bob, Bob}$)$
+            \item $(X,Y)=($\texttt{Alice, Charlie}$)$
+        \end{itemize}
+    \end{itemize}
+    \item Funktoren $\mathcal{F}=\{f\}$
+    \begin{itemize}
+        \item $f$ ist einstellig. Es gilt Folgendes.
+          \begin{itemize}
+            \item $f(\mathtt{Alice})=\mathtt{Bob}$
+            \item $f(\mathtt{Bob})=\mathtt{Alice}$
+            \item $f(\mathtt{Charlie})=\mathtt{Diane}$
+            \item $f(\mathtt{Diane})=\mathtt{Diane}$
+          \end{itemize}
+    \end{itemize}
+\end{itemize}
+Bestimmen Sie die Menge $L(T)\subseteq D$ der Werte für $T$, mit denen die Formel den
+Wahrheitswert \textbf{wahr} annimmt. \\
+\score{15} 
+
+\end{aufgabe}
+\begin{loesung}
+
+\end{loesung}
+
+\end{document}

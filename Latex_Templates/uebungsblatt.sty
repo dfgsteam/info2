@@ -1,0 +1,438 @@
+%==================================================================================================================================================
+% Package uebungsblatt by Igor Akkerman (c)2000,2001,2002,2003,2004,2005,2006
+% Modification by Maria Kosche (c)2020
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License (latest version).
+%
+% The latest version of this license can be found at
+%     http://www.latex-project.org/lppl.txt
+%==================================================================================================================================================
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\ProvidesPackage{uebungsblatt}[2006/10/24 by Igor Akkerman (c)2000,2001,2002,2003,2004,2005,2006 v3.2.1 Package zum Setzen von Uebungsblaettern edited by Maria Kosche (c)2020]
+%==================================================================================================================================================
+
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage[ngerman]{babel}
+%\RequirePackage{bibgerm}
+% German abbreviations
+\RequirePackage{akkgermanabbreviations}
+\RequirePackage{fancyhdr}
+\RequirePackage{akkcounterlabelpattern}
+\RequirePackage{comment}
+
+\RequirePackage{mathtools}
+%-----------------------------------------------------------------------------
+
+\makeatletter
+
+%--------------------------
+% blatt (Zaehler)
+% Nummer des Uebungsblatts
+% (geht nicht als Befehl, da der Wert sonst in der Anzeige nicht automatisch aktualisiert wird.)
+%--------------------------
+% \blattnummer{<Blattnummer>}
+% Setzt den Wert des Zählers blatt auf <Blattnummer>
+%--------------------------
+\newcounter{blatt}
+\newcommand \blattnummer[1] {%
+    \setcounter{blatt}{#1}%
+}
+%--------------------------
+
+%--------------------------
+% aufgabe (Zaehler)
+% Nummer der aktuellen Aufgabe
+%--------------------------
+% \aufgabelabel{<labelmuster>}
+% Setzt das Label der Aufgaben auf <labelmuster>.
+% <labelmuster> ist ein Muster wie definiert im Paket counterlabelpattern.
+%--------------------------
+\newcounter{aufgabe}
+\setcounter{aufgabe}{1}  % Nummer der ersten Aufgabe standardmäßig 
+\newcommand \aufgabelabel[1] {%
+    \createcounterlabel {aufgabe} {@aufgabelabel} {#1}%
+}
+%--------------------------
+
+%--------------------------
+% \loesunglabel{<labelmuster>}
+% Setzt das Label der Lösungen auf <labelmuster>.
+%--------------------------
+\newcommand \@loesunglabel {}%
+\newcommand \loesunglabel[1] {%
+    \renewcommand \@loesunglabel {#1}%
+}
+%--------------------------
+
+%--------------------------
+% @inhead (boolean)
+% true, wenn gerade im Übungsblatt-Kopf gearbeitet wird (inhead-Modus); false sonst
+%--------------------------
+% \@inhead{<text>}
+% aktiviert den inhead-Modus für <text>, darf nur im Kopf verwendet werden
+%--------------------------
+% \ifinhead{<danntext>}{<sonsttext>}
+% <danntext> im inhead-Modus; <sonsttext> sonst
+%--------------------------
+\newboolean{@inhead}
+\newcommand \@inhead[1] {\setboolean{@inhead}{true}#1\setboolean{@inhead}{false}}
+\newcommand \ifinhead[2] {\ifthenelse{\boolean{@inhead}}{#1}{#2}}
+%--------------------------
+
+%--------------------------
+% \@blatttitel
+% Liefert den aktuellen Titel des Übungsblatts.
+%--------------------------
+% \blatttitel{<titel>}
+% Setzt den Blatttitel auf <titel>.
+% Der Titel wird im Kopf und bei Beginn des Übungsblatts verwendet.
+% Optional kann im Text '\ifinhead{<danntext>}{<sonsttext>}' eingefügt werden,
+% was <danntext> lediglich im Kopf an der Stelle erzeugt, ansonsten wird der <sonsttext> erzeugt
+% Zum Zeilenumbruch im Kopf wird \\ verwendet.
+% Default: Bearbeitung des \theblatt.~Übungsblatts
+%--------------------------
+\newcommand \@blatttitel {}%
+\newcommand \blatttitel[1] {%
+    \renewcommand \@blatttitel {#1}%
+}
+%--------------------------
+
+%--------------------------
+% \@blattuntertitel
+% Liefert den aktuellen Untertitel des Übungsblatts.
+%--------------------------
+% \blattuntertitel{<untertitel>}
+% Setzt den Blattuntertitel auf <untertitel>.
+% Default: <kein Titel>
+%--------------------------
+\newcommand \@blattuntertitel {}%
+\newcommand \blattuntertitel[1] {%
+    \renewcommand \@blattuntertitel {#1}%
+}
+%--------------------------
+
+%--------------------------
+% \@header
+% Liefert den aktuellen Header des Übungsblatts.
+%--------------------------
+% \header{<header>}
+% Setzt den Blattuntertitel auf <header>.
+% Default: <kein Header>
+%--------------------------
+\newcommand \@header {}%
+\newcommand \header[1] {%
+    \renewcommand \@header {#1}%
+}
+%--------------------------
+
+%--------------------------
+% \@abgabedatum
+% Liefert das aktuelle Abgabedatum des Übungsblatts
+%--------------------------
+% \abgabedatum{<abgabedatum>}
+% Setzt das Abgabedatum auf <abgabedatum>.
+% Default: <kein Abgabedatum>
+%--------------------------
+\newcommand \@abgabedatum {}%
+\newcommand \abgabedatum[1] {%
+	\renewcommand \@abgabedatum {#1}%
+}
+%--------------------------
+
+%--------------------------
+% \@abgabeinfo
+% Liefert den aktuellen Abgabeinfotext des Übungsblatts.
+%--------------------------
+% \abgabeinfo{<abgabeinfo>}
+% Setzt den Abgabeinfotext auf <abgabeinfo>.
+% Default: Abgabe bis \@abgabedatum.
+%--------------------------
+\newcommand \@abgabeinfo {}%
+\newcommand \abgabeinfo[1] {%
+	\renewcommand \@abgabeinfo {#1}%
+}
+%--------------------------
+
+%--------------------------
+% \@lernmodul
+% Liefert den aktuellen Lernmodultext des Übungsblatts.
+%--------------------------
+% \lernmodul{<lernmodul>}
+% Setzt den Lernmodultext auf <lernmodul>.
+% Default: <kein Lernmodul>
+%--------------------------
+\newcommand \@lernmodul {}%
+\newcommand \lernmodul[1] {%
+	\renewcommand \@lernmodul {#1}%
+}
+%--------------------------
+
+%--------------------------
+% \@introtext
+% Liefert den aktuellen allgemeinen Introtext des Übungsblatts.
+%--------------------------
+% \introtext{<introtext>}
+% Setzt den allgemeinen Introtext auf <introtext>.
+% Default: <kein Text>
+%--------------------------
+\newcommand \@introtext {}%
+\newcommand \introtext[1] {%
+	\renewcommand \@introtext {#1}%
+}
+%--------------------------
+
+%--------------------------
+% \begin{@aufgabe} ... \end{@aufgabe}
+% Aufgabenskelett
+%--------------------------
+\newenvironment{@aufgabe} {%
+    \par%
+    \textbf{\@aufgabelabel}%
+    \\*[\parskip]%
+%    \ifthenelse {\equal{#1}{}} {%
+%        % ohne Teilaufgaben
+%        \setboolean{@teilaufgaben}{false}%
+%        \\*[\parskip]%
+%    }{%
+%        % mit Teilaufgaben
+%        \setboolean{@teilaufgaben}{true}%
+%        \begin{teilaufgaben}{#1}%
+%    }%
+}%
+{%
+%    \ifthenelse{\boolean{@teilaufgaben}}{\end{teilaufgaben}}{}%
+    \par%
+    \vspace{0.5\baselineskip plus 2pt minus 1pt}%
+}
+
+%--------------------------
+% \begin{aufgabe} ... \end{aufgabe}
+% Aufgabe mit Standardlabel
+%--------------------------
+% \begin{aufgabe}[<labelergaenzung>] ... \end{aufgabe}
+% Aufgabe mit Labelerweiterung
+%--------------------------
+\newenvironment{aufgabe}[1][] {%
+    \refstepcounter{aufgabe}%
+    \edef \@currentlabel {\theaufgabe}%
+    \let \orig@aufgabelabel \@aufgabelabel%
+    \renewcommand \@aufgabelabel {\orig@aufgabelabel\ #1}%
+    \begin{@aufgabe}%
+}{%
+    \end{@aufgabe}%
+    \let \@aufgabelabel \orig@aufgabelabel%
+}
+%--------------------------
+
+%--------------------------
+% \begin{aufgabe*}[<aufgabelabel>] ... \end{aufgabe*}
+% Aufgabe mit Label <aufgabelabel>
+%--------------------------
+% Der Aufgabenzähler wird NICHT erhöht!
+%--------------------------
+\newenvironment{aufgabe*}[1][] {%
+    \let \orig@aufgabelabel \@aufgabelabel%
+    \renewcommand \@aufgabelabel {#1}%
+    \begin{@aufgabe}%
+}{%
+    \end{@aufgabe}%
+    \let \@aufgabelabel \orig@aufgabelabel%
+}
+%--------------------------
+
+
+%--------------------------
+% \begin{loseung} ... \end{loesung}
+% Loesung mit Standardlabel
+%--------------------------
+\newenvironment{loesung} {%
+	\textbf{\@loesunglabel}%
+	\par%
+}{}
+%--------------------------
+
+%--------------------------
+% \begin{cut} ... \end{cut}
+% Umgebungsinhalt wird auskommentiert
+%--------------------------
+\newcommand{\cut}[1]{}
+\excludecomment{cut}
+%--------------------------
+
+%--------------------------
+% Zähler für Punkte
+%--------------------------
+\newcommand{\counterlabel}[2]{%
+	\addtocounter{#1}{-1}%
+	\refstepcounter{#1}%
+	\label{#2}%
+}
+
+\newcounter{sum_counter}
+\setcounter{sum_counter}{0}
+\newcounter{score_counter}
+\setcounter{score_counter}{0}
+
+\newcommand{\score}[1]{%%
+	\addtocounter{score_counter}{#1}%%
+	\addtocounter{sum_counter}{#1}%%
+	\ifthenelse{#1=1}{({#1} Punkt)}{({#1} Punkte)}%%
+}
+
+\newcommand{\scorelabel}[1]{
+	\counterlabel{score_counter}{#1}
+	\setcounter{score_counter}{0}
+}
+
+\newcommand{\sumlabel}[1]{
+	\counterlabel{sum_counter}{#1}
+	\setcounter{sum_counter}{0}
+}
+%--------------------------
+
+\newcommand \aufgaberef[1] {\ref{#1}}
+\newcommand \teilaufgaberef[1] {\ref{#1}}
+
+\makeatother
+
+\usepackage{listings,color}
+\usepackage{bold-extra}
+
+\definecolor{hellgelb}{rgb}{1,1,0.8}
+\definecolor{hellgrau}{rgb}{0.9,0.9,0.9}
+\definecolor{colKeys}{rgb}{0,0,1}
+\definecolor{colIdentifier}{rgb}{0,0,0}
+\definecolor{colComments}{rgb}{1,0,0}
+\definecolor{colString}{rgb}{0,0.5,0}
+\definecolor{lightcyan}{cmyk}{0.122,0,0,0}
+\definecolor{darkgray}{gray}{.25}
+
+
+
+\lstset{
+,xleftmargin=5pt,xrightmargin=5pt
+,basicstyle=\ttfamily\color{black}
+,commentstyle=\color{colComments}
+,keywordstyle=\bfseries\color{colKeys}
+,numberstyle=\tiny
+,showspaces=false
+,showstringspaces=false
+,stringstyle=\color{colString}
+,identifierstyle=\color{colIdentifier}
+,emph={[2]System,out,in,err,println,print,
+String,Integer,parseInt,parseFloat,Boolean,parseBoolean,true,false,length,
+java,lang,Math,main}
+,emphstyle=\underbar
+,emphstyle={[2]\itshape}
+}
+
+
+\lstdefinelanguage{pseudocode}
+{%
+morekeywords=%
+{IF,THEN,ELSE,END_IF,%
+WHILE,DO,END_WHILE,END_DO,FOR,FROM,TO,DOWNTO,PROCEDURE,%
+BEGIN,END,%
+INPUT,OUTPUT,RETURN,REGISTER,RETURNS,READ,KEYBORD,ARGUMENT,PRINT,PRINTS,%
+MIN, OR, AND, TRUE,FALSE,EXIT},%
+sensitive=false,%% Gross- oder Kleinschreibung erlaubt
+morecomment=[l]{//}, %% Kommentare ...
+morecomment=[s]{/*}{*/}, %% ... wie ueblich
+morestring=[b]", %% Strings in " " wie ueblich
+mathescape=true, %% Formeln koennen benutzt werden
+escapechar=@, %% Bsp: |\label{Zeile}|
+% literate=%
+% {:=}{{$\gets$}}1,% % anstelle := wird <- gesetzt, 1 Zeichen breit
+flexiblecolumns=true,
+backgroundcolor=\color{lightcyan},
+numbers=left,
+numberstyle=\tiny
+}
+
+
+\lstdefinelanguage{none} {
+  deletekeywords={in, main}
+}
+
+\lstdefinelanguage{program} {
+  morekeywords={Program, Mutex, down, up, int, if, else, while, true, false}
+  ,otherkeywords={}
+  ,morecomment=[l][\color{darkgray}\itshape]{//}
+}
+
+\newcommand{\txt}{
+\lstset{
+  emphstyle=\normalfont,
+  emphstyle=\normalfont,
+  frame=single,
+  frameround=ffff}
+}
+
+\newcommand{\markdown}{
+\lstset{
+  language=haskell
+  ,frame=single
+  ,frameround=ffff
+  ,framexleftmargin=7pt
+  ,xleftmargin=7pt
+  ,basicstyle=\ttfamily\footnotesize%\scriptsize
+  ,commentstyle=\ttfamily\footnotesize%\scriptsize
+  ,keywordstyle=\ttfamily\footnotesize%\scriptsize
+  ,emphstyle=\ttfamily\footnotesize%\scriptsize
+  ,numbers=none%right%left%
+  ,numberstyle=\tiny
+  ,showspaces=false
+  ,showstringspaces=false
+  ,emphstyle=\underbar}
+}
+\newcommand{\haskell}{
+\lstset{
+  language=haskell
+  ,frame=single
+  ,frameround=ffff
+  ,framexleftmargin=7pt
+  ,xleftmargin=7pt
+  ,basicstyle=\ttfamily\footnotesize%\scriptsize
+  ,commentstyle=\color{darkgray}
+  ,keywordstyle=\bfseries%\color{red}
+  ,numbers=none%right%left%
+  ,numberstyle=\tiny
+  ,showspaces=false
+  ,showstringspaces=false
+  ,emphstyle=\underbar}
+}
+
+\newcommand{\program}
+{
+\lstset{
+  language=program
+  ,frame=tb
+  ,framexleftmargin=17pt
+  ,xleftmargin=17pt
+  ,basicstyle=\ttfamily\footnotesize%\scriptsize
+  ,commentstyle=\color{darkgray}
+  ,keywordstyle=\bfseries%\color{red}
+  ,numbers=left%none%right
+  ,numberstyle=\tiny
+  ,showspaces=false
+  ,showstringspaces=false
+  ,emphstyle=\underbar}
+}
+
+\newcommand{\pseudo}
+{
+\lstset{
+  language=pseudocode
+  ,frame=single
+  ,frameround=ffff
+  ,framexleftmargin=7pt
+  ,xleftmargin=7pt
+  ,basicstyle=\ttfamily\footnotesize%\scriptsize
+  ,backgroundcolor=\color{white}
+  ,commentstyle=\color{darkgray}
+  ,keywordstyle=\bfseries\color{black}
+  ,numbers=none}
+}
+

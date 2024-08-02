@@ -1,0 +1,153 @@
+% Dokoumentenklassen legen das grobe Layout fest. Hier wird eine selbsterstellte Klasse verwendet, deswegen benötigt man zum erstellen des PDFs auch die Datei uebungsblatt.cls und uebungsblatt.sty
+\documentclass{uebungsblatt}
+
+\usepackage[linesnumbered,commentsnumbered]{algorithm2e}
+\usepackage{tikz}
+\usepackage{hyperref}
+% Store \nl in \oldnl
+\let\oldnl\nl
+% Remove line number for one line
+\newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}}
+
+%Hier wird die Kopfzeile erstellt
+\header{\textbf{Grundlagen der Praktischen Informatik}\hfill\textbf{Sommersemester 2024}\\
+Student:in1 (Matrikelnummer1) % Name des Gruppenmitglieds Eintragen
+\hfill Georg-August-Universität Göttingen \\
+Student:in2 (Matrikelnummer2)  % Name des Gruppenmitglieds Eintragen
+\hfill Institut für Informatik\\ 
+Student:in3 (Matrikelnummer2)\\  % Name des Gruppenmitglieds Eintragen
+Student:in4 (Matrikelnummer2)\\  % Name des Gruppenmitglieds Eintragen
+
+% Hiermit wird der horizontale Strick erzeugt, der die Kopfzeile abgrenzt.
+\rule{\textwidth}{0.1mm}}
+
+% Hier wird die Blattnummer festgelegt.
+\blattnummer{5}
+
+% Hier beginnt der eigentliche Textkörper. Alles zwischen \begin{document} und \end{document} ist der eigentliche Text
+\begin{document}
+
+% Mit \underline kann man Sachen unterstreichen
+
+
+% \begin{aufgabe} erstellt ein Aufgabenumgebung mit [...] könnt ihr den Titel angeben und mit \score die Punktzahl festlegen. Ist aber für euch nicht so wichtig.
+\begin{aufgabe}[Pumping Lemma \score{17}]
+Zeigen Sie, dass die Sprache 
+$L = \{a^p \ | \ p \in \mathbb{N} \text{ ist eine Primzahl}\}$ nicht regulär ist.\\
+\score{17}
+
+\medskip
+\underline{Hinweise}
+
+\begin{itemize}
+\item
+Es gibt unendlich viele Primzahlen, d.h. für jedes 
+$k \in \mathbb{N}$ gibt es eine Primzahl $p \geq k + 2$.
+\item
+Der Widerspruch $xy^iz \not\in L$, d.h. $|xy^iz|$ ist keine Primzahl,
+muss mit einem passend gewählten $i \in \mathbb{N}$ geführt werden.
+\end{itemize}
+
+\end{aufgabe}
+% Hier könnt ihr eure Lösung hinschreiben
+\begin{loesung} 
+
+\end{loesung}
+\newpage
+%-----------------------------
+\begin{aufgabe}[Grammatik \score{26}]
+\medskip
+Gegeben sei folgende Sprache über dem Alphabet $\Sigma = \{a,b\}$.
+\begin{align*}
+L = \{ w \in \Sigma^* \ | \ w\ \mbox{enthält weder das Teilwort $aa$ noch das Teilwort $bb$} \}
+\end{align*}
+
+\begin{enumerate}
+\item
+\label{kurzeWoerter}
+Geben Sie die sieben kürzesten Wörter aus $L$ an.\\
+\score{4}
+\item
+\label{abGrammatik}
+Geben Sie eine reguläre Grammatik $G$ an, die $L$ erzeugt.
+Benutzen Sie dabei höchstens 4 Nichterminale.\\
+\score{8}
+\item
+Zeigen Sie für die beiden längsten Wörter aus Aufgabenteil~\ref{kurzeWoerter}., jeweils
+durch Angabe einer Ableitung, das diese Wörter zur Sprache $L(G)$ gehören, die
+von der Grammatik aus Aufgabenteil \ref{abGrammatik}. erzeugt wird.\\
+\score{4}
+\item
+Ist $L$ eine reguläre Sprache? Mit Begründung.\\
+\score{2}
+\item
+Legen Sie eine natürliche Zahl $k \in \mathbb{N}$ fest und 
+geben Sie für jedes Wort $w \in L$ mit $|w| \ge k$ eine Zerlegung 
+$xyz \in \{a, b\}^*$ an, für die gilt
+\begin{itemize}
+\item
+$w = xyz$,
+\item
+$|y| \ge 1$, 
+\item
+$|xy| \le k$,
+\item
+für alle $i \in \mathbb{N} \cup \{0\}$ gilt, $xy^{i}z \in L$.
+\end{itemize}
+\score{8}
+\end{enumerate}
+\end{aufgabe}
+\begin{loesung}
+
+\end{loesung}
+\newpage
+\begin{aufgabe}[Rechts-/Linkslineare Grammatik \score{16}]
+\medskip
+Gegeben sei folgende rechtslineare Grammatik $G = (N,T,P,S)$.
+\begin{itemize}
+\item
+Nichtterminale
+$N := \{$ START, BIN, NULL, OP $\}$
+\item
+Terminale
+$T := \{0, 1, \vee, \wedge\}$
+\item
+Produktionen 
+\begin{tabbing}
+$P$ := \{ \quad \= FACTOR \quad \= \kill
+$P$ := \{ \> START  \>$\rightarrow$ 1 BIN $|$ 0 NULL $|$ 1 $|$ 0  \\
+          \> BIN    \>$\rightarrow$ 1 BIN $|$ 0 BIN $|$ $\vee$ OP $|$ $\wedge$ OP $|$ $\varepsilon$ \\
+          \> NULL   \>$\rightarrow$ $\vee$ OP $|$ $\wedge$ OP $|$ $\varepsilon$ \\
+          \> OP     \>$\rightarrow$ 1 BIN $|$ 0 NULL \quad \}
+\end{tabbing}
+\item
+Startsymbol $S :=$ START
+\end{itemize}
+
+\begin{enumerate}
+\item
+\label{zweiWoerter}
+Geben Sie zwei Worte der von $G$ erzeugten Sprache $L(G)$ an, 
+die jeweils mit $0$ und $1$ beginnen,
+jeweils jedes Terminalsymbol mindestens einmal enthalten und
+insgesamt keine Ziffernfolge mehr als einmal enthalten.\\
+\score{2}
+\item
+\label{linksGrammatik}
+Geben Sie eine linkslineare Grammatik $G'$ an, 
+die dieselbe Sprache wie die rechtslineare Grammatik $G$
+erzeugt, d.h. es gilt $L(G') = L(G)$.\\
+\score{10}
+\item
+Zeigen Sie für die beiden Wörter aus Aufgabenteil~\ref{zweiWoerter}., jeweils
+durch Angabe einer Ableitung, das diese Wörter zur Sprache $L(G')$ gehören, die
+von der Grammatik aus Aufgabenteil \ref{linksGrammatik}. erzeugt wird.\\
+\score{4}
+
+\end{enumerate}
+\end{aufgabe}
+% Hier könnt ihr eure Lösung hinschreiben
+\begin{loesung}
+
+\end{loesung}
+\end{document}
