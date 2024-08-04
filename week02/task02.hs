@@ -56,8 +56,8 @@ nibbleAdder (a, b ,c, d) (e, f, g, h) =
     let (c1, s1) = bitAdder a e False
         (c2, s2) = bitAdder b f c1
         (c3, s3) = bitAdder c g c2
-        (c, s4) = bitAdder d h c3
-    in (c, (s1, s2, s3, s4))
+        (c4, s4) = bitAdder d h c3
+    in (c4, (s1, s2, s3, s4))
 
 -- task01.04
 tableAdder :: (Nibble -> Nibble -> (Bool, Nibble))-> [(Nibble, Nibble )] -> String
