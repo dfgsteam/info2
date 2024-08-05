@@ -125,5 +125,7 @@ main = do
     print $ prog "c+c"        -- Expected: Nothing
     print $ prog "+c$"        -- Expected: Nothing
     print $ prog "a$"         -- Expected: Nothing
+    print $ prog "c$c"
+    print $ prog "c+c-c$$"
 
 
