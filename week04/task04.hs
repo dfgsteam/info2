@@ -54,13 +54,76 @@ id_list (x:xs) =
         error "id_list_tail no element found"
 
 -- task01.02
+removeLast :: String -> String
+removeLast [] = []
+removeLast [_] = []
+removeLast (x:xs) = x : removeLast xs
 
+match2 :: Char -> Maybe String -> Maybe String
+match2 _ Nothing = Nothing
+match2 _ (Just []) = Nothing
+match2 a (Just (x:xs)) =
+    if x == a then Just xs
+    else Nothing
 
+prog :: String -> Maybe String
+prog [] = Nothing
+prog l = 
+    if last l == '$' then
+        case expr (Just (removeLast l)) of
+            Just "" -> Just ""
+            _ -> Nothing
+    else Nothing
 
+expr :: Maybe String -> Maybe String
+expr l = case term l of
+    Just rest -> ttail (Just rest)
+    Nothing -> Nothing
+
+term :: Maybe String -> Maybe String
+term l = ftail (factor l)
+
+ttail :: Maybe String -> Maybe String
+ttail Nothing = Nothing
+ttail (Just []) = Just []
+ttail (Just l) = 
+    let
+        newString = match2 '+' (Just l)
+    in
+        case newString of
+            Just rest -> ttail (term (Just rest))
+            Nothing -> Just l
+
+factor :: Maybe String -> Maybe String
+factor Nothing = Nothing
+factor (Just []) = Nothing
+factor (Just (x:xs)) =
+    if x == 'c' then Just xs
+    else Nothing
+
+ftail :: Maybe String -> Maybe String
+ftail Nothing = Nothing
+ftail (Just []) = Just []
+ftail (Just l) = 
+    let
+        newString = match2 '*' (Just l)
+    in
+        case newString of
+            Just rest -> ftail (factor (Just rest))
+            Nothing -> Just l
 
 
 main :: IO ()
 main = do
     print $ id_list ["id", ",", "id", ";", "$$"]
-    print $ id_list_tail ["id", "$$"]
+    print $ prog "c+c*c$"
+    print $ prog "c+c-c$"
+    print $ prog "c$"         -- Expected: Just ""
+    print $ prog "c+c$"       -- Expected: Just ""
+    print $ prog "c*c$"       -- Expected: Just ""
+    print $ prog "c*c+c$"     -- Expected: Just ""
+    print $ prog "c+c"        -- Expected: Nothing
+    print $ prog "+c$"        -- Expected: Nothing
+    print $ prog "a$"         -- Expected: Nothing
+
 
